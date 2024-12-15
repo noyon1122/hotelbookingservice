@@ -80,7 +80,7 @@ public class HotelService {
 			  
 		      //update location
 			  Location location=locationRepo.findById(updateHotel.getLocation().getId()).orElseThrow(
-						()-> new EntityNotFoundException("Hotel is not not found by this id : "+updateHotel.getLocation().getId())
+						()-> new EntityNotFoundException("Location is not not found by this id : "+updateHotel.getLocation().getId())
 						);		  
 			  
 			  
@@ -91,6 +91,7 @@ public class HotelService {
 		  if(image !=null && !image.isEmpty())
 		  {
 			  String fileName=saveImage(existingHotel, image);
+			  existingHotel.setImage(fileName);
 		  }
 		 
 		  

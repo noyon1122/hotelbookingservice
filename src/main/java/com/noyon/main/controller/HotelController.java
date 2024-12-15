@@ -1,14 +1,18 @@
 package com.noyon.main.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -28,30 +32,51 @@ public class HotelController {
 	private HotelService hotelService;
 	
 	//save location with image
-		@PostMapping("/save")
-		public ResponseEntity<Map<String, String>> saveHotel(
-				@RequestPart(value = "hotel") String hotelJson,
-				@RequestParam(value = "image") MultipartFile file) throws JsonMappingException, JsonProcessingException  
-		{
-			ObjectMapper objectMapper=new ObjectMapper();
-			Hotel hotel=objectMapper.readValue(hotelJson, Hotel.class);
-			
-			try {
-				hotelService.saveHotel(hotel, file);
-				Map<String, String> response=new HashMap<>();
-				response.put("Message","Hotel Added Successfully");
-				return new ResponseEntity<>(response,HttpStatus.CREATED);
-			}
-			catch (Exception e) {
-				// TODO: handle exception
-				
-				Map<String, String> errorResponse=new HashMap<>();
-				errorResponse.put("Message","Hotel Add failed");
-				return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-		}
+//		@PostMapping("/save")
+//		public ResponseEntity<Map<String, String>> saveHotel(
+//				@RequestPart(value = "hotel") String hotelJson,
+//				@RequestParam(value = "image") MultipartFile file) throws JsonMappingException, JsonProcessingException  
+//		{
+//			ObjectMapper objectMapper=new ObjectMapper();
+//			Hotel hotel=objectMapper.readValue(hotelJson, Hotel.class);
+//			
+//			try {
+//				hotelService.saveHotel(hotel, file);
+//				Map<String, String> response=new HashMap<>();
+//				response.put("Message","Hotel Added Successfully");
+//				return new ResponseEntity<>(response,HttpStatus.CREATED);
+//			}
+//			catch (Exception e) {
+//				// TODO: handle exception
+//				
+//				Map<String, String> errorResponse=new HashMap<>();
+//				errorResponse.put("Message","Hotel Add failed");
+//				return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+//			}
+//			
+//		}
 		
+	@PostMapping("/save")
+	public ResponseEntity<Map<String, String>> saveHotel(
+			@RequestPart(value = "hotel") String hotelJson,
+			@RequestParam(value = "image") MultipartFile file
+			) throws JsonMappingException, JsonProcessingException
+	{
+		ObjectMapper objectMapper =new ObjectMapper();
+		Hotel hotel=objectMapper.readValue(hotelJson, Hotel.class);
+		
+		try {
+			hotelService.saveHotel(hotel, file);
+			Map<String, String> response=new HashMap<String, String>();
+			response.put("Message","Hotel information added Successfully!!");
+			return new ResponseEntity<Map<String,String>>(response,HttpStatus.CREATED);
+		} catch (Exception e) {
+			// TODO: handle exception
+			Map<String, String> errorResponse=new HashMap<String, String>();
+			errorResponse.put("Message","Hotel information faild to added!!");
+			return new ResponseEntity<Map<String,String>>(errorResponse,HttpStatus.CREATED);
+		}
+	}
 		//get all location
 		@GetMapping("/")
 		public ResponseEntity<List<Hotel>> getAllHotel()
@@ -87,24 +112,27 @@ public class HotelController {
 		
 		//delete location by id
 		
-//		@DeleteMapping("/delete/{id}")
-//		public ResponseEntity<String> deleteHotel(@PathVariable int id)
-//		{
-//			try {
-//				hotelService.deleteHotel(id);
-//				return ResponseEntity.ok("Hotel is deleted successfully by this id : !!"+id);
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//			}
-//		}
-//		
+		@DeleteMapping("/delete/{id}")
+		public ResponseEntity<String> deleteHotel(@PathVariable int id)
+		{
+			try {
+				hotelService.deleteHotel(id);
+				return ResponseEntity.ok("Hotel is deleted successfully by this id : !!"+id);
+			} catch (Exception e) {
+			
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+			}
+		}
+		
 //		//update location by id
-//		
-//		@PutMapping("/update/{id}")
-//		public ResponseEntity<Hotel> updateHotelById(@PathVariable int id, @RequestBody Hotel hotel,@RequestParam(value = "image", required = true) MultipartFile file) throws IOException
-//		{
-//			Hotel updateHotel=hotelService.updateHotel(hotel, id, file);
-//			return ResponseEntity.ok(updateHotel);
-//		}
+		
+		@PutMapping("/update/{id}")
+		public ResponseEntity<Hotel> updateHotelById(
+				@PathVariable int id,
+				@RequestPart Hotel hotel,
+				@RequestParam(value = "image") MultipartFile file) throws IOException
+		{
+			Hotel updateHotel=hotelService.updateHotel(hotel, id, file);
+			return ResponseEntity.ok(updateHotel);
+		}
 }

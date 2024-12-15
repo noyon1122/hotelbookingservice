@@ -72,7 +72,7 @@ public class LocationService {
 
 
 	//update location by id
-	public Location updateLocation(Location updatelocation, int id) throws IOException {
+	public Location updateLocation(Location updatelocation, int id,MultipartFile image) throws IOException {
 		Location existingLocation = locationRepo.findById(id).orElseThrow(
 				()-> new EntityNotFoundException("Location is not not found by this id : "+id));
 		
@@ -81,11 +81,11 @@ public class LocationService {
 			  existingLocation.setName(updatelocation.getName());
 		  }
 		  
-//		  if(image !=null && !image.isEmpty())
-//		  {
-//			  String fileName=saveImage(existingLocation, image);
-//			  existingLocation.setImage(fileName);
-//		  }
+		  if(image !=null && !image.isEmpty())
+		  {
+			  String fileName=saveImage(existingLocation, image);
+			  existingLocation.setImage(fileName);
+		  }
 		 
 		  
 		  locationRepo.save(existingLocation);
@@ -94,7 +94,7 @@ public class LocationService {
 	}
 
     
-	//update location 
+	//update delete
 	
 	public void deleteLocation(int id) {
 		// TODO Auto-generated method stub

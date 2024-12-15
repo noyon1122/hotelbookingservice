@@ -1,5 +1,7 @@
 package com.noyon.main.entities;
 
+import java.util.Optional;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -112,6 +114,7 @@ public class Hotel {
 		return "Hotel [id=" + id + ", name=" + name + ", address=" + address + ", rating=" + rating + ", maxPrice="
 				+ maxPrice + ", minPrice=" + minPrice + ", image=" + image + ", location=" + location + "]";
 	}
+
 	
 	
 	
