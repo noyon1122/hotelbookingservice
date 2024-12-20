@@ -34,7 +34,7 @@ public class HotelService {
 	{
 		if(imagefile !=null && !imagefile.isEmpty())
 		{
-			String imageFileName=saveImage(hotel,imagefile);
+			String imageFileName=saveImage(hotel, imagefile);
 			hotel.setImage(imageFileName);
 		}
 		
